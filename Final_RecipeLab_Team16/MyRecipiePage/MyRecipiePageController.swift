@@ -7,10 +7,10 @@
 
 import UIKit
 
-class AddRecipiePageController: UIViewController {
+class MyRecipiePageController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Create Recipie"
+        title = "My Recipie"
     }
 }

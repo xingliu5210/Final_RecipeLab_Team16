@@ -6,27 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXContainerItemProxy section */
-		7DFC99632EC8CFA90083586A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DFC99442EC8CFA90083586A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7DFC994B2EC8CFA90083586A;
-			remoteInfo = Final_RecipeLab_Team16;
-		};
-		7DFC996D2EC8CFA90083586A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7DFC99442EC8CFA90083586A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7DFC994B2EC8CFA90083586A;
-			remoteInfo = Final_RecipeLab_Team16;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		7DFC994C2EC8CFA90083586A /* Final_RecipeLab_Team16.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Final_RecipeLab_Team16.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DFC99622EC8CFA90083586A /* Final_RecipeLab_Team16Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Final_RecipeLab_Team16Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7DFC996C2EC8CFA90083586A /* Final_RecipeLab_Team16UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Final_RecipeLab_Team16UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -48,34 +29,10 @@
 			path = Final_RecipeLab_Team16;
 			sourceTree = "<group>";
 		};
-		7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Final_RecipeLab_Team16Tests;
-			sourceTree = "<group>";
-		};
-		7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Final_RecipeLab_Team16UITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		7DFC99492EC8CFA90083586A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7DFC995F2EC8CFA90083586A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7DFC99692EC8CFA90083586A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -89,8 +46,6 @@
 			isa = PBXGroup;
 			children = (
 				7DFC994E2EC8CFA90083586A /* Final_RecipeLab_Team16 */,
-				7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */,
-				7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */,
 				7DFC994D2EC8CFA90083586A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,8 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				7DFC994C2EC8CFA90083586A /* Final_RecipeLab_Team16.app */,
-				7DFC99622EC8CFA90083586A /* Final_RecipeLab_Team16Tests.xctest */,
-				7DFC996C2EC8CFA90083586A /* Final_RecipeLab_Team16UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -130,52 +83,6 @@
 			productReference = 7DFC994C2EC8CFA90083586A /* Final_RecipeLab_Team16.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7DFC99612EC8CFA90083586A /* Final_RecipeLab_Team16Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7DFC997A2EC8CFA90083586A /* Build configuration list for PBXNativeTarget "Final_RecipeLab_Team16Tests" */;
-			buildPhases = (
-				7DFC995E2EC8CFA90083586A /* Sources */,
-				7DFC995F2EC8CFA90083586A /* Frameworks */,
-				7DFC99602EC8CFA90083586A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7DFC99642EC8CFA90083586A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */,
-			);
-			name = Final_RecipeLab_Team16Tests;
-			packageProductDependencies = (
-			);
-			productName = Final_RecipeLab_Team16Tests;
-			productReference = 7DFC99622EC8CFA90083586A /* Final_RecipeLab_Team16Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		7DFC996B2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 7DFC997D2EC8CFA90083586A /* Build configuration list for PBXNativeTarget "Final_RecipeLab_Team16UITests" */;
-			buildPhases = (
-				7DFC99682EC8CFA90083586A /* Sources */,
-				7DFC99692EC8CFA90083586A /* Frameworks */,
-				7DFC996A2EC8CFA90083586A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				7DFC996E2EC8CFA90083586A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */,
-			);
-			name = Final_RecipeLab_Team16UITests;
-			packageProductDependencies = (
-			);
-			productName = Final_RecipeLab_Team16UITests;
-			productReference = 7DFC996C2EC8CFA90083586A /* Final_RecipeLab_Team16UITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -188,14 +95,6 @@
 				TargetAttributes = {
 					7DFC994B2EC8CFA90083586A = {
 						CreatedOnToolsVersion = 16.4;
-					};
-					7DFC99612EC8CFA90083586A = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = 7DFC994B2EC8CFA90083586A;
-					};
-					7DFC996B2EC8CFA90083586A = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = 7DFC994B2EC8CFA90083586A;
 					};
 				};
 			};
@@ -214,28 +113,12 @@
 			projectRoot = "";
 			targets = (
 				7DFC994B2EC8CFA90083586A /* Final_RecipeLab_Team16 */,
-				7DFC99612EC8CFA90083586A /* Final_RecipeLab_Team16Tests */,
-				7DFC996B2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		7DFC994A2EC8CFA90083586A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7DFC99602EC8CFA90083586A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7DFC996A2EC8CFA90083586A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -252,34 +135,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7DFC995E2EC8CFA90083586A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		7DFC99682EC8CFA90083586A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		7DFC99642EC8CFA90083586A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7DFC994B2EC8CFA90083586A /* Final_RecipeLab_Team16 */;
-			targetProxy = 7DFC99632EC8CFA90083586A /* PBXContainerItemProxy */;
-		};
-		7DFC996E2EC8CFA90083586A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7DFC994B2EC8CFA90083586A /* Final_RecipeLab_Team16 */;
-			targetProxy = 7DFC996D2EC8CFA90083586A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		7DFC99762EC8CFA90083586A /* Debug */ = {
@@ -289,13 +145,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6VD8VMP5WL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Final_RecipeLab_Team16/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -316,13 +175,16 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6VD8VMP5WL;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Final_RecipeLab_Team16/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -455,74 +317,6 @@
 			};
 			name = Release;
 		};
-		7DFC997B2EC8CFA90083586A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.northeastern.Final-RecipeLab-Team16Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Final_RecipeLab_Team16.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Final_RecipeLab_Team16";
-			};
-			name = Debug;
-		};
-		7DFC997C2EC8CFA90083586A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.northeastern.Final-RecipeLab-Team16Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Final_RecipeLab_Team16.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Final_RecipeLab_Team16";
-			};
-			name = Release;
-		};
-		7DFC997E2EC8CFA90083586A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.northeastern.Final-RecipeLab-Team16UITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Final_RecipeLab_Team16;
-			};
-			name = Debug;
-		};
-		7DFC997F2EC8CFA90083586A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.northeastern.Final-RecipeLab-Team16UITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Final_RecipeLab_Team16;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -540,24 +334,6 @@
 			buildConfigurations = (
 				7DFC99762EC8CFA90083586A /* Debug */,
 				7DFC99772EC8CFA90083586A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7DFC997A2EC8CFA90083586A /* Build configuration list for PBXNativeTarget "Final_RecipeLab_Team16Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7DFC997B2EC8CFA90083586A /* Debug */,
-				7DFC997C2EC8CFA90083586A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7DFC997D2EC8CFA90083586A /* Build configuration list for PBXNativeTarget "Final_RecipeLab_Team16UITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				7DFC997E2EC8CFA90083586A /* Debug */,
-				7DFC997F2EC8CFA90083586A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

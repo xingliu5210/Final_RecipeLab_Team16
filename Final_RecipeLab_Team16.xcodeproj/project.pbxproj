@@ -48,6 +48,16 @@
 			path = Final_RecipeLab_Team16;
 			sourceTree = "<group>";
 		};
+		7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Final_RecipeLab_Team16Tests;
+			sourceTree = "<group>";
+		};
+		7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Final_RecipeLab_Team16UITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				7DFC994E2EC8CFA90083586A /* Final_RecipeLab_Team16 */,
+				7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */,
+				7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */,
 				7DFC994D2EC8CFA90083586A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -131,6 +143,9 @@
 			dependencies = (
 				7DFC99642EC8CFA90083586A /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				7DFC99652EC8CFA90083586A /* Final_RecipeLab_Team16Tests */,
+			);
 			name = Final_RecipeLab_Team16Tests;
 			packageProductDependencies = (
 			);
@@ -150,6 +165,9 @@
 			);
 			dependencies = (
 				7DFC996E2EC8CFA90083586A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7DFC996F2EC8CFA90083586A /* Final_RecipeLab_Team16UITests */,
 			);
 			name = Final_RecipeLab_Team16UITests;
 			packageProductDependencies = (

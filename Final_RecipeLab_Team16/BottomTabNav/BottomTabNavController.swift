@@ -3,6 +3,10 @@ import UIKit
 class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let beigeColor = UIColor(named: "Beige") {
+            tabBar.backgroundColor = beigeColor
+            tabBar.barTintColor = beigeColor
+        }
 
         let home = UINavigationController(rootViewController: MainPageController())
         home.tabBarItem = UITabBarItem(title: "Home",

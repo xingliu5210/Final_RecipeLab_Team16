@@ -8,9 +8,14 @@
 import UIKit
 
 class AddRecipiePageController: BaseViewController {
+    private let rootView = AddRecipePageView()
+    
+    override func loadView() {
+        view = rootView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Create Recipie"
     }
 }

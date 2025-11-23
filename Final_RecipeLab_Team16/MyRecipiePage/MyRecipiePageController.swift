@@ -8,7 +8,26 @@
 import UIKit
 
 class MyRecipiePageController: BaseViewController {
+
+    private let rootView = MyRecipiePageView()
+
+    override func loadView() {
+        view = rootView
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Fake User Profile Simulation
+        let mockProfile = UserProfile(
+            id: "123",
+            username: "@JessieCooks",
+            avatarUrl: "",
+            role: "Home Cook",
+            followers: 128,
+            recipeCount: 8
+        )
+        
+        rootView.updateUserProfile(mockProfile)
     }
 }

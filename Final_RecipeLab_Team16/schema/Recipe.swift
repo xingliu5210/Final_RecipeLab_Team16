@@ -1,4 +1,4 @@
-import FirebaseFirestore
+
 //
 //  Recipe.swift
 //  Final_RecipeLab_Team16
@@ -14,5 +14,4 @@ struct Recipe {
     let ingredients: [String]
     let steps: [String]
     let userId: String          // recipe owner
-    let createdAt: Timestamp
 }

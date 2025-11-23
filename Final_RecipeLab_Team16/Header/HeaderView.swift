@@ -9,14 +9,7 @@ import UIKit
 
 class HeaderView: UIView {
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
 
-        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,26 +23,38 @@ class HeaderView: UIView {
 
     private func setupView() {
         backgroundColor = UIColor(named: "Orange")
-        addSubview(titleLabel)
 
-        let logoImageView = UIImageView()
-        logoImageView.image = UIImage(named: "RecipeLabText (1)")
-        logoImageView.contentMode = .scaleAspectFit
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(logoImageView)
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerView)
+
+        let leftImageView = UIImageView()
+        leftImageView.image = UIImage(named: "chiefimage (1)")
+        leftImageView.contentMode = .scaleAspectFit
+        leftImageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(leftImageView)
+
+        let rightImageView = UIImageView()
+        rightImageView.image = UIImage(named: "RecipeLabText (1)")
+        rightImageView.contentMode = .scaleAspectFit
+        rightImageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(rightImageView)
 
         NSLayoutConstraint.activate([
-            logoImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            logoImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            logoImageView.heightAnchor.constraint(equalToConstant: 130),
-            logoImageView.widthAnchor.constraint(equalToConstant: 130),
+            containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
 
-            titleLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 4),
-            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor)
+            leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            leftImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            leftImageView.heightAnchor.constraint(equalToConstant: 40),
+            leftImageView.widthAnchor.constraint(equalToConstant: 40),
+
+            rightImageView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 4),
+            rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            rightImageView.heightAnchor.constraint(equalToConstant: 130),
+            rightImageView.widthAnchor.constraint(equalToConstant: 130),
+            rightImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+
         ])
     }
 
-    func setTitle(_ text: String) {
-        titleLabel.text = text
-    }
 }

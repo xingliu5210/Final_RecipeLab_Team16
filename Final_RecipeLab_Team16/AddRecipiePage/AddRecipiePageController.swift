@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddRecipiePageController: UIViewController {
+class AddRecipiePageController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white

@@ -40,7 +40,7 @@ class MainPageView: UIView {
             let card = CardView()
 
             card.configure(
-                userImage: UIImage(named: "user_placeholder"),
+                userImage: UIImage(named: "user\(cardViews.count + 1)"),
                 userName: item.userName,
                 timeAgo: item.timeAgo,
                 recipeImage: UIImage(named: item.image),

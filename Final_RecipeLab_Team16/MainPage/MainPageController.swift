@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainPageController: UIViewController {
+class MainPageController: BaseViewController {
 
     private let mainView = MainPageView()
 

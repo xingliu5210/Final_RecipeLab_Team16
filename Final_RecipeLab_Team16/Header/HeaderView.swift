@@ -10,7 +10,6 @@ import UIKit
 class HeaderView: UIView {
 
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -41,17 +40,19 @@ class HeaderView: UIView {
         containerView.addSubview(rightImageView)
 
         NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             leftImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            leftImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            leftImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -6),
             leftImageView.heightAnchor.constraint(equalToConstant: 40),
             leftImageView.widthAnchor.constraint(equalToConstant: 40),
 
             rightImageView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 4),
-            rightImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            rightImageView.heightAnchor.constraint(equalToConstant: 130),
-            rightImageView.widthAnchor.constraint(equalToConstant: 130),
+            rightImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -6),
+            rightImageView.heightAnchor.constraint(equalToConstant: 50),
+            rightImageView.widthAnchor.constraint(equalToConstant: 120),
             rightImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
         ])

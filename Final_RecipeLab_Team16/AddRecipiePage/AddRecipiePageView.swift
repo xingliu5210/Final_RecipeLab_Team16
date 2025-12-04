@@ -11,7 +11,6 @@ class AddRecipePageView: UIView {
 
     // MARK: - UI Components
 
-    let scrollView = UIScrollView()
     let container = UIView()
 
 
@@ -116,7 +115,6 @@ class AddRecipePageView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
         setup()
     }
 
@@ -127,98 +125,92 @@ class AddRecipePageView: UIView {
     // MARK: - Layout Setup
 
     private func setup() {
-        addSubview(scrollView)
-        scrollView.addSubview(container)
+            // 🛑 REMOVE: addSubview(scrollView) and scrollView.addSubview(container)
 
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        container.translatesAutoresizingMaskIntoConstraints = false
+            // Add components directly to this view (self)
+            [titleLabel, titleField, cookingTimeLabel, cookingTimeField, ingredientsLabel, ingredientsField, stepsLabel, stepsField, uploadContainer, uploadIcon, uploadLabel, saveButton]
+                .forEach { component in
+                    addSubview(component) // 💡 Add to self, not container
+                    component.translatesAutoresizingMaskIntoConstraints = false
+                }
+            
+            // Add upload icon/label inside the upload container
+            uploadContainer.addSubview(uploadIcon)
+            uploadContainer.addSubview(uploadLabel)
+            
+            // Set constraints for upload icon/label inside the container
+            NSLayoutConstraint.activate([
+                // Icon centered
+                uploadIcon.centerXAnchor.constraint(equalTo: uploadContainer.centerXAnchor),
+                uploadIcon.topAnchor.constraint(equalTo: uploadContainer.topAnchor, constant: 25),
+                uploadIcon.widthAnchor.constraint(equalToConstant: 60),
+                uploadIcon.heightAnchor.constraint(equalToConstant: 60),
 
-        [titleLabel, titleField, cookingTimeLabel, cookingTimeField, ingredientsLabel, ingredientsField, stepsLabel, stepsField, uploadContainer, uploadIcon, uploadLabel, saveButton]
-            .forEach { component in
-                container.addSubview(component)
-                component.translatesAutoresizingMaskIntoConstraints = false
-            }
+                // Label centered under icon
+                uploadLabel.topAnchor.constraint(equalTo: uploadIcon.bottomAnchor, constant: 10),
+                uploadLabel.centerXAnchor.constraint(equalTo: uploadContainer.centerXAnchor),
+            ])
+            
+            // Activate main layout constraints
+            NSLayoutConstraint.activate([
+                // Title label (Pinning to self.topAnchor)
+                titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+                titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
 
-        NSLayoutConstraint.activate([
-            // scrollView
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+                // Title field
+                titleField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+                titleField.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+                titleField.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+                titleField.heightAnchor.constraint(equalToConstant: 44),
 
-            // container
-            container.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            container.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            container.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            container.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+                // Cooking time label
+                cookingTimeLabel.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 20),
+                cookingTimeLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                cookingTimeLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
 
-            // Title label
-            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+                // Cooking time field
+                cookingTimeField.topAnchor.constraint(equalTo: cookingTimeLabel.bottomAnchor, constant: 8),
+                cookingTimeField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                cookingTimeField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                cookingTimeField.heightAnchor.constraint(equalToConstant: 44),
 
-            // Title field
-            titleField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            titleField.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            titleField.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-            titleField.heightAnchor.constraint(equalToConstant: 44),
+                // Ingredients label
+                ingredientsLabel.topAnchor.constraint(equalTo: cookingTimeField.bottomAnchor, constant: 20),
+                ingredientsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                ingredientsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
 
-            // Cooking time label
-            cookingTimeLabel.topAnchor.constraint(equalTo: titleField.bottomAnchor, constant: 20),
-            cookingTimeLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            cookingTimeLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                // Ingredients field
+                ingredientsField.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 8),
+                ingredientsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                ingredientsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                ingredientsField.heightAnchor.constraint(equalToConstant: 180),
 
-            // Cooking time field
-            cookingTimeField.topAnchor.constraint(equalTo: cookingTimeLabel.bottomAnchor, constant: 8),
-            cookingTimeField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            cookingTimeField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-            cookingTimeField.heightAnchor.constraint(equalToConstant: 44),
+                // Steps label
+                stepsLabel.topAnchor.constraint(equalTo: ingredientsField.bottomAnchor, constant: 20),
+                stepsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                stepsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
 
-            // Ingredients label
-            ingredientsLabel.topAnchor.constraint(equalTo: cookingTimeField.bottomAnchor, constant: 20),
-            ingredientsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            ingredientsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                // Cooking Steps field
+                stepsField.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor, constant: 8),
+                stepsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                stepsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                stepsField.heightAnchor.constraint(equalToConstant: 220),
 
-            // Ingredients
-            ingredientsField.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 8),
-            ingredientsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            ingredientsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-            ingredientsField.heightAnchor.constraint(equalToConstant: 180),
+                // Upload container
+                uploadContainer.topAnchor.constraint(equalTo: stepsField.bottomAnchor, constant: 25),
+                uploadContainer.leadingAnchor.constraint(equalTo: titleField.leadingAnchor), // Use existing margins
+                uploadContainer.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                uploadContainer.heightAnchor.constraint(equalToConstant: 180),
 
-            // Steps label
-            stepsLabel.topAnchor.constraint(equalTo: ingredientsField.bottomAnchor, constant: 20),
-            stepsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            stepsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-
-            // Cooking Steps
-            stepsField.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor, constant: 8),
-            stepsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            stepsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-            stepsField.heightAnchor.constraint(equalToConstant: 220),
-
-            // Upload container
-            uploadContainer.topAnchor.constraint(equalTo: stepsField.bottomAnchor, constant: 25),
-            uploadContainer.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            uploadContainer.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-            uploadContainer.heightAnchor.constraint(equalToConstant: 180),
-
-            // Icon centered
-            uploadIcon.centerXAnchor.constraint(equalTo: uploadContainer.centerXAnchor),
-            uploadIcon.topAnchor.constraint(equalTo: uploadContainer.topAnchor, constant: 25),
-            uploadIcon.widthAnchor.constraint(equalToConstant: 60),
-            uploadIcon.heightAnchor.constraint(equalToConstant: 60),
-
-            // Label centered under icon
-            uploadLabel.topAnchor.constraint(equalTo: uploadIcon.bottomAnchor, constant: 10),
-            uploadLabel.centerXAnchor.constraint(equalTo: uploadContainer.centerXAnchor),
-
-            // Save button
-            saveButton.topAnchor.constraint(equalTo: uploadContainer.bottomAnchor, constant: 35),
-            saveButton.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-            saveButton.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-            saveButton.heightAnchor.constraint(equalToConstant: 50),
-            saveButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -40)
-        ])
+                // Save button
+                saveButton.topAnchor.constraint(equalTo: uploadContainer.bottomAnchor, constant: 35),
+                saveButton.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                saveButton.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+                saveButton.heightAnchor.constraint(equalToConstant: 50),
+                
+                // 🔑 CRUCIAL: Pin the bottom-most element to the view's bottom to define content height
+                saveButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
+            ])
+        }
     }
-}

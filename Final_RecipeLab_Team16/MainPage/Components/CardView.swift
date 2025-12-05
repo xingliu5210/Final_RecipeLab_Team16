@@ -46,7 +46,7 @@ class CardView: UIView {
                                   placeholder: UIImage(named: "placeholder"))
 
         titleLabel.text = recipe.title
-        likeLabel.text = "\(recipe.likes)"
+        likeLabel.text = "\(recipe.likedBy.count)"
         timeAmountLabel.text = "\(recipe.cookingTime) min"
     }
 }

@@ -11,7 +11,7 @@ struct Recipe: Identifiable, Codable {
     let userName: String
     let creationTime: Timestamp
     let userImageUrl: String
-    let likes: Int
+    let likedBy: [String: Bool?]
 
     var creationTimeAgo: String {
         let date = creationTime.dateValue()

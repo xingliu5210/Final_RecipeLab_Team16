@@ -11,7 +11,6 @@ class RecipieDetailPageView: UIView {
 
     // MARK: - UI
 
-    private let scrollView = UIScrollView()
     private let stackView = UIStackView()
 
     private let recipeImageView: UIImageView = {
@@ -135,10 +134,11 @@ class RecipieDetailPageView: UIView {
     // MARK: - Setup
 
     private func setupUI() {
-        // Scroll
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.alwaysBounceVertical = true
-        addSubview(scrollView)
+        // Add stackView directly to self
+        addSubview(stackView)
+
+        addSubview(recipeImageView)
+        recipeImageView.translatesAutoresizingMaskIntoConstraints = false
 
         // Stack
         stackView.axis = .vertical
@@ -148,9 +148,6 @@ class RecipieDetailPageView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         // FIX: Ensure stackView is allowed to grow vertically to determine content size
         stackView.setContentHuggingPriority(.defaultLow, for: .vertical)
-
-        // Add stack to scroll
-        scrollView.addSubview(stackView)
 
         // Layout margins for text
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -178,13 +175,7 @@ class RecipieDetailPageView: UIView {
 
         // Arrange content inside stackView
 
-        // 1. image (full width, no side margins)
-        recipeImageView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(recipeImageView)
-        recipeImageView.heightAnchor.constraint(equalToConstant: 240).isActive = true
-
         // 2. Content labels
-        stackView.setCustomSpacing(16, after: recipeImageView) // bigger gap under image
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(authorLabel)
         stackView.addArrangedSubview(timeAgoLabel)
@@ -202,25 +193,16 @@ class RecipieDetailPageView: UIView {
     }
 
     private func setupConstraints() {
-        let contentGuide = scrollView.contentLayoutGuide
-        let frameGuide = scrollView.frameLayoutGuide // Used for horizontal constraints
-
         NSLayoutConstraint.activate([
-            // Scroll view within safe area (so tab bar doesn't cover content)
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            recipeImageView.topAnchor.constraint(equalTo: topAnchor),
+            recipeImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            recipeImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            recipeImageView.heightAnchor.constraint(equalToConstant: 240),
 
-            // Stack view pinned vertically to scroll content (contentGuide)
-            stackView.topAnchor.constraint(equalTo: contentGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentGuide.bottomAnchor),
-
-            // FIXED: Stack view pinned horizontally to the scroll view's frame (frameGuide)
-            // This ensures the width of the content (stackView) matches the visible width (frame),
-            // which is essential for scroll view to calculate vertical content size.
-            stackView.leadingAnchor.constraint(equalTo: frameGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: frameGuide.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: recipeImageView.bottomAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

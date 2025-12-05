@@ -50,7 +50,7 @@ class HeaderView: UIView {
             leftImageView.widthAnchor.constraint(equalToConstant: 40),
 
             rightImageView.leadingAnchor.constraint(equalTo: leftImageView.trailingAnchor, constant: 4),
-            rightImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -6),
+            rightImageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
             rightImageView.heightAnchor.constraint(equalToConstant: 50),
             rightImageView.widthAnchor.constraint(equalToConstant: 120),
             rightImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),

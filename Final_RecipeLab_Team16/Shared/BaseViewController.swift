@@ -20,7 +20,7 @@ class BaseViewController: UIViewController {
         
         scrollView.addSubview(contentContainer)
         
-        
+        navigationController?.navigationBar.tintColor = .white
         
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.topAnchor),

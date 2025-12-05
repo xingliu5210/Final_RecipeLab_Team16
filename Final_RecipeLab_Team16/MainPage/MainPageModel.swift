@@ -2,6 +2,7 @@ import Foundation
 import FirebaseFirestore
 
 class MainPageModel {
+    var recipes: [Recipe] = []
     private let db = Firestore.firestore()
 
     func fetchRecipes(completion: @escaping ([Recipe]?, Error?) -> Void) {
@@ -9,7 +10,7 @@ class MainPageModel {
         print("DEBUG: Fetching recipes...")
 
         db.collection("recipes")
-            .order(by: "title")
+            .order(by: "creationTime")
             .getDocuments { snapshot, error in
 
                 if let error = error {
@@ -36,7 +37,7 @@ class MainPageModel {
                         return nil
                     }
                 }
-
+                self.recipes = recipes
                 completion(recipes, nil)
             }
     }

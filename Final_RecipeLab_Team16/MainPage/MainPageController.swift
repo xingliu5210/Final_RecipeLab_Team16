@@ -25,7 +25,8 @@ class MainPageController: BaseViewController {
     }
     
     @objc private func openFakeDetail() {
-        let detailVC = RecipieDetailPageController()
+        guard let recipe = model.recipes.first else { return }
+        let detailVC = RecipieDetailPageController(recipe: recipe)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 
@@ -42,4 +43,3 @@ class MainPageController: BaseViewController {
         }
     }
 }
-

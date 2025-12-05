@@ -71,8 +71,6 @@ class RecipieDetailPageView: UIView {
     private let statsStackView = UIStackView()
     private let likeIconView = UIImageView(image: UIImage(systemName: "heart.fill"))
     private let likeCountLabel = UILabel()
-    private let commentIconView = UIImageView(image: UIImage(systemName: "bubble.right"))
-    private let commentCountLabel = UILabel()
 
     // MARK: - Init
 
@@ -124,11 +122,19 @@ class RecipieDetailPageView: UIView {
             .joined(separator: "\n\n")
 
         likeIconView.tintColor = .systemOrange
-        commentIconView.tintColor = .gray
         likeCountLabel.text = "128"
-        commentCountLabel.text = "9"
         likeCountLabel.font = UIFont.systemFont(ofSize: 15)
-        commentCountLabel.font = UIFont.systemFont(ofSize: 15)
+    }
+
+    func configure(with recipe: Recipe) {
+        backgroundColor = .systemBackground
+        recipeImageView.loadImage(from: recipe.imageUrl)
+        titleLabel.text = recipe.title
+        authorLabel.text = recipe.userName
+        timeAgoLabel.text = recipe.creationTimeAgo
+        ingredientsLabel.text = recipe.ingredients.map { "• \($0)" }.joined(separator: "\n")
+        instructionsLabel.text = recipe.steps.enumerated().map { "\($0 + 1). \($1)" }.joined(separator: "\n\n")
+        likeCountLabel.text = "\(recipe.likedBy.count)"
     }
 
     // MARK: - Setup
@@ -170,8 +176,6 @@ class RecipieDetailPageView: UIView {
         statsStackView.addArrangedSubview(likeIconView)
         statsStackView.addArrangedSubview(likeCountLabel)
         statsStackView.addArrangedSubview(statsSpacer)
-        statsStackView.addArrangedSubview(commentIconView)
-        statsStackView.addArrangedSubview(commentCountLabel)
 
         // Arrange content inside stackView
 

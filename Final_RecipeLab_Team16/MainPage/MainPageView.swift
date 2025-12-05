@@ -26,7 +26,7 @@ class MainPageView: UIView {
         setupConstraints()
     }
 
-    func render(recipes: [RecipeItem]) {
+    func render(recipes: [Recipe]) {
         cardViews.forEach { $0.removeFromSuperview() }
         cardViews.removeAll()
 
@@ -39,16 +39,7 @@ class MainPageView: UIView {
         for item in recipes {
             let card = CardView()
 
-            card.configure(
-                userImage: UIImage(named: "user\(cardViews.count + 1)"),
-                userName: item.userName,
-                timeAgo: item.timeAgo,
-                recipeImage: UIImage(named: item.image),
-                title: item.title,
-                desc: item.desc,
-                likes: item.likes,
-                cookTime: item.cookTime
-            )
+            card.configure(with: item)
 
             contentView.addSubview(card)
             card.translatesAutoresizingMaskIntoConstraints = false

@@ -22,10 +22,7 @@ class MyRecipiePageController: BaseViewController {
         let mockProfile = UserProfile(
             id: "123",
             username: "@JessieCooks",
-            avatarUrl: "",
-            role: "Home Cook",
-            followers: 128,
-            recipeCount: 8
+            avatarUrl: ""
         )
         
         rootView.updateUserProfile(mockProfile)

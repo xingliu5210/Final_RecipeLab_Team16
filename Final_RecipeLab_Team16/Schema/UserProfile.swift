@@ -9,7 +9,4 @@ struct UserProfile {
     let id: String
     let username: String        // @JessieCooks
     let avatarUrl: String
-    let role: String            // “Home Cook”
-    let followers: Int
-    let recipeCount: Int
 }

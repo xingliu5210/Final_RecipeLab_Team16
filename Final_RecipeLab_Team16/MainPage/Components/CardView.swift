@@ -39,21 +39,12 @@ class CardView: UIView {
         userNameLabel.text = recipe.userName
         timeLabel.text = recipe.creationTimeAgo
 
-        // Load user avatar URL
-        if let userImageURL = URL(string: recipe.userImageUrl),
-           let userImageData = try? Data(contentsOf: userImageURL) {
-            userImageView.image = UIImage(data: userImageData)
-        } else {
-            userImageView.image = UIImage(named: "chiefimage (1)")
-        }
+        userImageView.loadImage(from: recipe.userImageUrl,
+                                placeholder: UIImage(named: "chiefimage (1)"))
 
-        // Load recipe image URL
-        if let recipeURL = URL(string: recipe.imageUrl),
-           let recipeData = try? Data(contentsOf: recipeURL) {
-            recipeImageView.image = UIImage(data: recipeData)
-        } else {
-            recipeImageView.image = UIImage(named: "placeholder")
-        }
+        recipeImageView.loadImage(from: recipe.imageUrl,
+                                  placeholder: UIImage(named: "placeholder"))
+
         titleLabel.text = recipe.title
         likeLabel.text = "\(recipe.likes)"
         timeAmountLabel.text = "\(recipe.cookingTime) min"

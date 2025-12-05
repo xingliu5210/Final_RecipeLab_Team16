@@ -18,6 +18,14 @@ class MainPageController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupData()
+        // Temporary: any tap on the main page opens the fake detail screen
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFakeDetail))
+            view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func openFakeDetail() {
+        let detailVC = RecipieDetailPageController()
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 
     private func setupData() {

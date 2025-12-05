@@ -189,9 +189,6 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
 
     func updateUserProfile(_ profile: UserProfile) {
         usernameLabel.text = profile.username
-        roleLabel.text = profile.role
-        followersLabel.text = "\(profile.followers)\nFollowers"
-        recipesLabel.text = "\(profile.recipeCount)\nRecipes"
 
         if !profile.avatarUrl.isEmpty, let url = URL(string: profile.avatarUrl) {
             URLSession.shared.dataTask(with: url) { data, _, _ in

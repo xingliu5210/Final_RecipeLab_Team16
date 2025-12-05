@@ -35,24 +35,28 @@ class CardView: UIView {
         setupConstraints()
     }
 
-    func configure(
-        userImage: UIImage?,
-        userName: String,
-        timeAgo: String,
-        recipeImage: UIImage?,
-        title: String,
-        desc: String,
-        likes: Int,
-        cookTime: String
-    ) {
-        userImageView.image = userImage
-        userNameLabel.text = userName
-        timeLabel.text = timeAgo
-        recipeImageView.image = recipeImage
-        titleLabel.text = title
-        descLabel.text = desc
-        likeLabel.text = "\(likes)"
-        timeAmountLabel.text = cookTime
+    func configure(with recipe: Recipe) {
+        userNameLabel.text = recipe.userName
+        timeLabel.text = recipe.creationTimeAgo
+
+        // Load user avatar URL
+        if let userImageURL = URL(string: recipe.userImageUrl),
+           let userImageData = try? Data(contentsOf: userImageURL) {
+            userImageView.image = UIImage(data: userImageData)
+        } else {
+            userImageView.image = UIImage(named: "chiefimage (1)")
+        }
+
+        // Load recipe image URL
+        if let recipeURL = URL(string: recipe.imageUrl),
+           let recipeData = try? Data(contentsOf: recipeURL) {
+            recipeImageView.image = UIImage(data: recipeData)
+        } else {
+            recipeImageView.image = UIImage(named: "placeholder")
+        }
+        titleLabel.text = recipe.title
+        likeLabel.text = "\(recipe.likes)"
+        timeAmountLabel.text = "\(recipe.cookingTime) min"
     }
 }
 

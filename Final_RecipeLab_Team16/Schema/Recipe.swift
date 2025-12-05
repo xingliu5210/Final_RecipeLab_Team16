@@ -5,7 +5,7 @@ struct Recipe: Identifiable, Codable {
     @DocumentID var id: String?
     let title: String
     let imageUrl: String
-    let cookingTime: String
+    let cookingTime: Int8
     let ingredients: [String]
     let steps: [String]
     let userName: String

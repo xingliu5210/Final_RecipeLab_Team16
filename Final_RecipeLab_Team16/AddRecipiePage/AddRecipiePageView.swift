@@ -12,6 +12,31 @@ class AddRecipePageView: UIView {
     // MARK: - UI Components
 
     let container = UIView()
+    let formContainer = UIView()
+    var selectedImage: UIImage?
+    var uploadedImageURL: String?
+
+    // Login prompt label
+    let loginPrompt: UILabel = {
+        let lbl = UILabel()
+        lbl.text = "Please log in to add a recipe"
+        lbl.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        lbl.textColor = .darkGray
+        lbl.textAlignment = .center
+        lbl.numberOfLines = 0
+        lbl.isHidden = true // hidden by default
+        return lbl
+    }()
+    
+    func showContent() {
+        loginPrompt.isHidden = true
+        formContainer.isHidden = false
+    }
+    
+    func showLoginPlaceholder() {
+        loginPrompt.isHidden = false
+        formContainer.isHidden = true
+    }
 
 
     let uploadContainer: UIView = {
@@ -64,7 +89,8 @@ class AddRecipePageView: UIView {
 
     let cookingTimeField: UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Cooking Time (e.g., 20 min)"
+        tf.keyboardType = .numberPad   // ← IMPORTANT
+        tf.placeholder = "Cooking Time (minutes)"
         tf.borderStyle = .roundedRect
         return tf
     }()
@@ -84,6 +110,16 @@ class AddRecipePageView: UIView {
         tv.font = .systemFont(ofSize: 16)
         return tv
     }()
+    
+    // Dynamic Ingredients
+    let ingredientStack = UIStackView()
+    let addIngredientButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("+ Add Ingredient", for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        btn.tintColor = .systemBlue
+        return btn
+    }()
 
     let stepsLabel: UILabel = {
         let lbl = UILabel()
@@ -99,6 +135,16 @@ class AddRecipePageView: UIView {
         tv.layer.cornerRadius = 10
         tv.font = .systemFont(ofSize: 16)
         return tv
+    }()
+    
+    // Dynamic Steps
+    let stepsStack = UIStackView()
+    let addStepButton: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("+ Add Step", for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        btn.tintColor = .systemBlue
+        return btn
     }()
 
     let saveButton: UIButton = {
@@ -127,24 +173,43 @@ class AddRecipePageView: UIView {
     private func setup() {
             // 🛑 REMOVE: addSubview(scrollView) and scrollView.addSubview(container)
 
-            // Add components directly to this view (self)
-            [titleLabel, titleField, cookingTimeLabel, cookingTimeField, ingredientsLabel, ingredientsField, stepsLabel, stepsField, uploadContainer, uploadIcon, uploadLabel, saveButton]
+            // Add formContainer to self
+            addSubview(formContainer)
+            formContainer.translatesAutoresizingMaskIntoConstraints = false
+
+            ingredientStack.axis = .vertical
+            ingredientStack.spacing = 8
+            stepsStack.axis = .vertical
+            stepsStack.spacing = 8
+            addIngredientButton.addTarget(self, action: #selector(addIngredientRow), for: .touchUpInside)
+            addStepButton.addTarget(self, action: #selector(addStepRow), for: .touchUpInside)
+
+            // Add components to formContainer
+            [titleLabel, titleField, cookingTimeLabel, cookingTimeField, ingredientsLabel, ingredientStack, addIngredientButton, stepsLabel, stepsStack, addStepButton, uploadContainer, uploadIcon, uploadLabel, saveButton]
                 .forEach { component in
-                    addSubview(component) // 💡 Add to self, not container
+                    formContainer.addSubview(component) // 💡 Add to formContainer
                     component.translatesAutoresizingMaskIntoConstraints = false
                 }
+            
+            addSubview(loginPrompt)
+            loginPrompt.translatesAutoresizingMaskIntoConstraints = false
             
             // Add upload icon/label inside the upload container
             uploadContainer.addSubview(uploadIcon)
             uploadContainer.addSubview(uploadLabel)
+            
+            // Add tap gesture recognizer to uploadContainer
+            let tap = UITapGestureRecognizer(target: self, action: #selector(didTapUpload))
+            uploadContainer.addGestureRecognizer(tap)
+            uploadContainer.isUserInteractionEnabled = true
             
             // Set constraints for upload icon/label inside the container
             NSLayoutConstraint.activate([
                 // Icon centered
                 uploadIcon.centerXAnchor.constraint(equalTo: uploadContainer.centerXAnchor),
                 uploadIcon.topAnchor.constraint(equalTo: uploadContainer.topAnchor, constant: 25),
-                uploadIcon.widthAnchor.constraint(equalToConstant: 60),
-                uploadIcon.heightAnchor.constraint(equalToConstant: 60),
+                uploadIcon.widthAnchor.constraint(equalToConstant: 120),
+                uploadIcon.heightAnchor.constraint(equalToConstant: 120),
 
                 // Label centered under icon
                 uploadLabel.topAnchor.constraint(equalTo: uploadIcon.bottomAnchor, constant: 10),
@@ -153,10 +218,16 @@ class AddRecipePageView: UIView {
             
             // Activate main layout constraints
             NSLayoutConstraint.activate([
-                // Title label (Pinning to self.topAnchor)
-                titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-                titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-                titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+                // Pin formContainer to self
+                formContainer.topAnchor.constraint(equalTo: topAnchor),
+                formContainer.leadingAnchor.constraint(equalTo: leadingAnchor),
+                formContainer.trailingAnchor.constraint(equalTo: trailingAnchor),
+                formContainer.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+                // Title label (Pinning to formContainer.topAnchor)
+                titleLabel.topAnchor.constraint(equalTo: formContainer.topAnchor, constant: 20),
+                titleLabel.leadingAnchor.constraint(equalTo: formContainer.leadingAnchor, constant: 20),
+                titleLabel.trailingAnchor.constraint(equalTo: formContainer.trailingAnchor, constant: -20),
 
                 // Title field
                 titleField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
@@ -180,25 +251,33 @@ class AddRecipePageView: UIView {
                 ingredientsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
                 ingredientsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
 
-                // Ingredients field
-                ingredientsField.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 8),
-                ingredientsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-                ingredientsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-                ingredientsField.heightAnchor.constraint(equalToConstant: 180),
+                // Ingredient stack
+                ingredientStack.topAnchor.constraint(equalTo: ingredientsLabel.bottomAnchor, constant: 8),
+                ingredientStack.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                ingredientStack.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+
+                // Add ingredient button
+                addIngredientButton.topAnchor.constraint(equalTo: ingredientStack.bottomAnchor, constant: 6),
+                addIngredientButton.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                addIngredientButton.heightAnchor.constraint(equalToConstant: 30),
 
                 // Steps label
-                stepsLabel.topAnchor.constraint(equalTo: ingredientsField.bottomAnchor, constant: 20),
+                stepsLabel.topAnchor.constraint(equalTo: addIngredientButton.bottomAnchor, constant: 20),
                 stepsLabel.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
                 stepsLabel.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
 
-                // Cooking Steps field
-                stepsField.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor, constant: 8),
-                stepsField.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
-                stepsField.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
-                stepsField.heightAnchor.constraint(equalToConstant: 220),
+                // Steps stack
+                stepsStack.topAnchor.constraint(equalTo: stepsLabel.bottomAnchor, constant: 8),
+                stepsStack.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                stepsStack.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
+
+                // Add step button
+                addStepButton.topAnchor.constraint(equalTo: stepsStack.bottomAnchor, constant: 6),
+                addStepButton.leadingAnchor.constraint(equalTo: titleField.leadingAnchor),
+                addStepButton.heightAnchor.constraint(equalToConstant: 30),
 
                 // Upload container
-                uploadContainer.topAnchor.constraint(equalTo: stepsField.bottomAnchor, constant: 25),
+                uploadContainer.topAnchor.constraint(equalTo: addStepButton.bottomAnchor, constant: 25),
                 uploadContainer.leadingAnchor.constraint(equalTo: titleField.leadingAnchor), // Use existing margins
                 uploadContainer.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
                 uploadContainer.heightAnchor.constraint(equalToConstant: 180),
@@ -209,8 +288,59 @@ class AddRecipePageView: UIView {
                 saveButton.trailingAnchor.constraint(equalTo: titleField.trailingAnchor),
                 saveButton.heightAnchor.constraint(equalToConstant: 50),
                 
-                // 🔑 CRUCIAL: Pin the bottom-most element to the view's bottom to define content height
-                saveButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
+                // 🔑 CRUCIAL: Pin the bottom-most element to the formContainer's bottom to define content height
+                saveButton.bottomAnchor.constraint(equalTo: formContainer.bottomAnchor, constant: -40),
+                
+                // Login prompt centered
+                loginPrompt.centerXAnchor.constraint(equalTo: centerXAnchor),
+                loginPrompt.centerYAnchor.constraint(equalTo: centerYAnchor),
+                loginPrompt.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+                loginPrompt.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
             ])
         }
+    
+    // Public method to show login prompt
+//    func showLoginPrompt() {
+//        loginPrompt.isHidden = false
+//    }
+    
+    @objc private func addIngredientRow() {
+        let row = makeRow()
+        ingredientStack.addArrangedSubview(row)
     }
+
+    @objc private func addStepRow() {
+        let row = makeRow()
+        stepsStack.addArrangedSubview(row)
+    }
+
+    private func makeRow() -> UIView {
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.spacing = 10
+
+        let textField = UITextField()
+        textField.borderStyle = .roundedRect
+        textField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+
+        let removeButton = UIButton(type: .system)
+        removeButton.setTitle("–", for: .normal)
+        removeButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        removeButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        removeButton.addTarget(self, action: #selector(removeRow(_:)), for: .touchUpInside)
+
+        row.addArrangedSubview(textField)
+        row.addArrangedSubview(removeButton)
+
+        return row
+    }
+
+    @objc private func removeRow(_ sender: UIButton) {
+        guard let row = sender.superview else { return }
+        row.removeFromSuperview()
+    }
+    
+    @objc private func didTapUpload() {
+        NotificationCenter.default.post(name: NSNotification.Name("AddRecipePickImage"), object: nil)
+    }
+}

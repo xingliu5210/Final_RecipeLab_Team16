@@ -8,5 +8,5 @@
 struct UserProfile {
     let id: String
     let username: String        // @JessieCooks
-    let avatarUrl: String
+    let avatarUrl: String?
 }

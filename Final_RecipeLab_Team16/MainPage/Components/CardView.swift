@@ -40,10 +40,10 @@ class CardView: UIView {
         timeLabel.text = recipe.creationTimeAgo
 
         userImageView.loadImage(from: recipe.userImageUrl,
-                                placeholder: UIImage(named: "chiefimage (1)"))
+                                placeholderNamed: "chiefimage (1)")
 
         recipeImageView.loadImage(from: recipe.imageUrl,
-                                  placeholder: UIImage(named: "placeholder"))
+                                  placeholderNamed: "placeholder")
 
         titleLabel.text = recipe.title
         likeLabel.text = "\(recipe.likedBy.count)"

@@ -1,4 +1,3 @@
-
 import UIKit
 
 class RecipeCardCell: UICollectionViewCell {
@@ -43,6 +42,17 @@ class RecipeCardCell: UICollectionViewCell {
 }
 
 class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+    // Placeholder when user is not logged in
+    let loginPlaceholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Please log in to view your recipes"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = .darkGray
+        label.isHidden = true
+        return label
+    }()
 
     // MARK: - UI Components
 
@@ -190,7 +200,9 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
     func updateUserProfile(_ profile: UserProfile) {
         usernameLabel.text = profile.username
 
-        if !profile.avatarUrl.isEmpty, let url = URL(string: profile.avatarUrl) {
+        if let avatar = profile.avatarUrl,
+           !avatar.isEmpty,
+           let url = URL(string: avatar) {
             URLSession.shared.dataTask(with: url) { data, _, _ in
                 if let data = data {
                     DispatchQueue.main.async {
@@ -198,6 +210,9 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
                     }
                 }
             }.resume()
+        } else {
+            // Fallback to local asset if no URL provided
+            self.avatarImageView.image = UIImage(named: "chiefimage (1)")
         }
     }
 
@@ -223,5 +238,31 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.frame.width - 10) / 2
         return CGSize(width: width, height: width * 1.2)
+    }
+    
+    func showLoginPlaceholder() {
+        // Hide actual content
+        scrollView.isHidden = true
+        
+        // Add placeholder
+        addSubview(loginPlaceholderLabel)
+        loginPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            loginPlaceholderLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            loginPlaceholderLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+
+        bringSubviewToFront(loginPlaceholderLabel)
+
+        loginPlaceholderLabel.isHidden = false
+    }
+
+    func showContent() {
+        // Hide placeholder
+        loginPlaceholderLabel.isHidden = true
+
+        // Show scroll content
+        scrollView.isHidden = false
     }
 }

@@ -8,19 +8,37 @@
 import UIKit
 
 extension UIImageView {
-    func loadImage(from urlString: String, placeholder: UIImage? = nil) {
-        self.image = placeholder
 
-        guard let url = URL(string: urlString) else { return }
+    /// Loads an image from a URL string. Supports optional URL and placeholder.
+    func loadImage(
+        from urlString: String?,
+        placeholderNamed placeholder: String? = nil
+    ) {
+        // Apply placeholder first
+        if let placeholder = placeholder {
+            self.image = UIImage(named: placeholder)
+        }
+
+        // Ensure non-empty valid URL string
+        guard let urlString = urlString,
+              let url = URL(string: urlString) else { return }
 
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard error == nil,
                   let data = data,
-                  let image = UIImage(data: data) else { return }
+                  let downloaded = UIImage(data: data) else { return }
 
             DispatchQueue.main.async {
-                self.image = image
+                self.image = downloaded
             }
         }.resume()
+    }
+
+    /// Convenience method for URL type
+    func loadImage(
+        from url: URL?,
+        placeholderNamed placeholder: String? = nil
+    ) {
+        loadImage(from: url?.absoluteString, placeholderNamed: placeholder)
     }
 }

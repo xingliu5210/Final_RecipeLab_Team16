@@ -9,9 +9,11 @@ struct Recipe: Identifiable, Codable {
     let ingredients: [String]
     let steps: [String]
     let userName: String
+    let userId: String
     let creationTime: Timestamp
     let userImageUrl: String
     let likedBy: [String: Bool?]
+
 
     var creationTimeAgo: String {
         let date = creationTime.dateValue()

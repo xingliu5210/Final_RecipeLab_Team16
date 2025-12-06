@@ -8,6 +8,7 @@
 import UIKit
 
 class RecipeCard: UICollectionViewCell {
+    static let identifier = "RecipeCard"
 
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()

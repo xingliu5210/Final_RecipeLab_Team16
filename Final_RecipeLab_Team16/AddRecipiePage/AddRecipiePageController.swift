@@ -111,6 +111,7 @@ class AddRecipiePageController: BaseViewController {
             ingredients: ingredients,
             steps: steps,
             userName: user.displayName ?? "Unknown",
+            userId: user.uid,
             creationTime: Timestamp(date: Date()),
             userImageUrl: user.photoURL?.absoluteString ?? "",
             likedBy: [:]

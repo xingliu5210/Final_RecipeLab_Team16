@@ -7,12 +7,25 @@
 
 import UIKit
 
-class MainPageView: UIView {
-    
-    private let scrollView = UIScrollView()
-    private let contentView = UIView()
+protocol MainPageViewDelegate: AnyObject {
+    func mainPageView(_ view: MainPageView, didSelect recipe: Recipe)
+}
 
-    private var cardViews: [CardView] = []
+class MainPageView: UIView {
+
+    weak var delegate: MainPageViewDelegate?
+
+    private var recipes: [Recipe] = []
+
+    // Vertical stack; each arranged subview is one horizontal row of 2 cards
+    private let containerStackView: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 16
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        return stack
+    }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,75 +39,66 @@ class MainPageView: UIView {
         setupConstraints()
     }
 
+    // MARK: - Public
+
     func render(recipes: [Recipe]) {
-        cardViews.forEach { $0.removeFromSuperview() }
-        cardViews.removeAll()
+        self.recipes = recipes
 
-        let cardWidth = (UIScreen.main.bounds.width - 36) / 2
-
-        var x: CGFloat = 12
-        var y: CGFloat = 12
-        var column = 0
-
-        for item in recipes {
-            let card = CardView()
-
-            card.configure(with: item)
-
-            contentView.addSubview(card)
-            card.translatesAutoresizingMaskIntoConstraints = false
-
-            NSLayoutConstraint.activate([
-                card.topAnchor.constraint(equalTo: contentView.topAnchor, constant: y),
-                card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: x),
-                card.widthAnchor.constraint(equalToConstant: cardWidth)
-            ])
-
-            card.layoutIfNeeded()
-
-            // New column logic
-            if column == 0 {
-                x = 12 + cardWidth + 12  // col 2
-                column = 1
-            } else {
-                x = 12
-                column = 0
-                y += card.frame.height + 20
-            }
-
-            cardViews.append(card)
+        // Remove old rows
+        for view in containerStackView.arrangedSubviews {
+            containerStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
         }
 
-        if let last = cardViews.last {
-            last.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20).isActive = true
+        var currentRow: UIStackView?
+
+        for (index, recipe) in recipes.enumerated() {
+            // Start a new row every 2 cards
+            if index % 2 == 0 {
+                let row = UIStackView()
+                row.axis = .horizontal
+                row.spacing = 12
+                row.alignment = .fill
+                row.distribution = .fillEqually
+                containerStackView.addArrangedSubview(row)
+                currentRow = row
+            }
+
+            let card = CardView()
+            card.configure(with: recipe)
+
+            card.isUserInteractionEnabled = true
+            card.tag = index
+            let tap = UITapGestureRecognizer(target: self,
+                                             action: #selector(cardTapped(_:)))
+            card.addGestureRecognizer(tap)
+
+            currentRow?.addArrangedSubview(card)
         }
     }
 
-    // MARK: UI Setup
+    // MARK: - Private
+
     private func setupUI() {
-        backgroundColor = .systemGroupedBackground
-
-        [scrollView, contentView].forEach {
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-
-        addSubview(scrollView)
-        scrollView.addSubview(contentView)
+        backgroundColor = .clear
+        containerStackView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerStackView)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            // ScrollView constraints
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            containerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            containerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
+            containerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -12),
+            containerStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
         ])
+    }
+
+    @objc private func cardTapped(_ gesture: UITapGestureRecognizer) {
+        guard let card = gesture.view as? CardView else { return }
+        let index = card.tag
+        guard index >= 0 && index < recipes.count else { return }
+        let recipe = recipes[index]
+        delegate?.mainPageView(self, didSelect: recipe)
     }
 }

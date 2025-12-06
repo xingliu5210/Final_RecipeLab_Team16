@@ -183,11 +183,33 @@ class BaseViewController: UIViewController {
     }
 
     @objc private func logoutPressed() {
-        do {
-            try Auth.auth().signOut()
-            print("Logged out")
-        } catch {
-            print("Logout failed: \(error)")
+        showUserMenu()
+    }
+
+    private func showUserMenu() {
+        guard let user = Auth.auth().currentUser else { return }
+
+        let alert = UIAlertController(title: user.displayName ?? "User",
+                                      message: user.email,
+                                      preferredStyle: .actionSheet)
+
+        alert.addAction(UIAlertAction(title: "Logout", style: .destructive, handler: { _ in
+            do {
+                try Auth.auth().signOut()
+                print("Logged out")
+            } catch {
+                print("Logout failed: \(error)")
+            }
+        }))
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        if let popover = alert.popoverPresentationController,
+           let imgView = self.userImageView {
+            popover.sourceView = imgView
+            popover.sourceRect = imgView.bounds
         }
+
+        self.present(alert, animated: true)
     }
 }

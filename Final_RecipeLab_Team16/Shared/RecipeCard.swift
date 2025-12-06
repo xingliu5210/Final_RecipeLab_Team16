@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CardView: UIView {
+class RecipeCard: UICollectionViewCell {
 
     private let userImageView = UIImageView()
     private let userNameLabel = UILabel()
@@ -52,7 +52,7 @@ class CardView: UIView {
 }
 
 // MARK: UI Setup
-private extension CardView {
+private extension RecipeCard {
 
     func setupUI() {
         backgroundColor = .white

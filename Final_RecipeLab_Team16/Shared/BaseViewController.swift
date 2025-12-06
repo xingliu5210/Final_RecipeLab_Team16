@@ -73,11 +73,10 @@ class BaseViewController: UIViewController {
         logo.contentMode = .scaleAspectFit
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        logo.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        logo.heightAnchor.constraint(equalToConstant: 60).isActive = true
 
         let titleStack = UIStackView(arrangedSubviews: [chef, logo])
         titleStack.axis = .horizontal
-        titleStack.spacing = 6
         titleStack.alignment = .center
 
         navigationItem.titleView = titleStack
@@ -109,7 +108,7 @@ class BaseViewController: UIViewController {
     }
 
     @objc private func loginPressed() {
-        NotificationCenter.default.post(name: Notification.Name("GoogleLoginRequested"), object: nil)
+        startGoogleLogin()
     }
 
     @objc private func startGoogleLogin() {
@@ -121,30 +120,37 @@ class BaseViewController: UIViewController {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
 
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
-            if let error = error {
-                print("Google Sign-in failed: \(error.localizedDescription)")
-                return
-            }
+        guard let topVC = UIApplication.shared.keyWindowPresentedController else {
+            print("No top-most VC available")
+            return
+        }
 
-            guard let user = result?.user,
-                  let idToken = user.idToken?.tokenString else {
-                print("Missing ID token")
-                return
-            }
-
-            let credential = GoogleAuthProvider.credential(
-                withIDToken: idToken,
-                accessToken: user.accessToken.tokenString
-            )
-
-            Auth.auth().signIn(with: credential) { authResult, error in
+        DispatchQueue.main.async {
+            GIDSignIn.sharedInstance.signIn(withPresenting: topVC) { result, error in
                 if let error = error {
-                    print("Firebase sign-in error: \(error.localizedDescription)")
+                    print("Google Sign-in failed: \(error.localizedDescription)")
                     return
                 }
 
-                print("Login success:", authResult?.user.uid ?? "No UID")
+                guard let user = result?.user,
+                      let idToken = user.idToken?.tokenString else {
+                    print("Missing ID token")
+                    return
+                }
+
+                let credential = GoogleAuthProvider.credential(
+                    withIDToken: idToken,
+                    accessToken: user.accessToken.tokenString
+                )
+
+                Auth.auth().signIn(with: credential) { authResult, error in
+                    if let error = error {
+                        print("Firebase sign-in error: \(error.localizedDescription)")
+                        return
+                    }
+
+                    print("Login success:", authResult?.user.uid ?? "No UID")
+                }
             }
         }
     }

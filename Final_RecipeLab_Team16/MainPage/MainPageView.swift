@@ -64,7 +64,7 @@ class MainPageView: UIView {
                 currentRow = row
             }
 
-            let card = CardView()
+            let card = RecipeCard()
             card.configure(with: recipe)
 
             card.isUserInteractionEnabled = true
@@ -95,7 +95,7 @@ class MainPageView: UIView {
     }
 
     @objc private func cardTapped(_ gesture: UITapGestureRecognizer) {
-        guard let card = gesture.view as? CardView else { return }
+        guard let card = gesture.view as? RecipeCard else { return }
         let index = card.tag
         guard index >= 0 && index < recipes.count else { return }
         let recipe = recipes[index]

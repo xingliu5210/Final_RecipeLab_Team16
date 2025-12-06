@@ -13,7 +13,7 @@ class BaseViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "Beige")
         setupNavBar()
-        Auth.auth().addStateDidChangeListener { [weak self] _, user in
+        _ = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             self?.updateUserStateUI(user: user)
         }
         NotificationCenter.default.addObserver(
@@ -121,16 +121,7 @@ class BaseViewController: UIViewController {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
 
-        guard let presentingVC = UIApplication.shared.connectedScenes
-            .compactMap({ $0 as? UIWindowScene })
-            .flatMap({ $0.windows })
-            .first(where: { $0.isKeyWindow })?
-            .rootViewController else {
-            print("Could not find top window controller")
-            return
-        }
-
-        GIDSignIn.sharedInstance.signIn(withPresenting: presentingVC) { result, error in
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { result, error in
             if let error = error {
                 print("Google Sign-in failed: \(error.localizedDescription)")
                 return

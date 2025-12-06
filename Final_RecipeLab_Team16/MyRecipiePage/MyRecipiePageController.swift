@@ -20,18 +20,20 @@ class MyRecipiePageController: BaseViewController {
         Auth.auth().addStateDidChangeListener { [weak self] _, user in
             guard let self = self else { return }
 
-            if let user = user {
-                // Logged in → show content
-                let profile = UserProfile(
-                    id: user.uid,
-                    username: user.displayName ?? "Unknown",
-                    avatarUrl: user.photoURL?.absoluteString
-                )
-                self.rootView.updateUserProfile(profile)
-                self.rootView.showContent()
-            } else {
-                // Logged out → show placeholder
-                self.rootView.showLoginPlaceholder()
+            DispatchQueue.main.async {
+                if let user = user {
+                    // Logged in → show content
+                    let profile = UserProfile(
+                        id: user.uid,
+                        username: user.displayName ?? "Unknown",
+                        avatarUrl: user.photoURL?.absoluteString
+                    )
+                    self.rootView.updateUserProfile(profile)
+                    self.rootView.showContent()
+                } else {
+                    // Logged out → show placeholder
+                    self.rootView.showLoginPlaceholder()
+                }
             }
         }
     }

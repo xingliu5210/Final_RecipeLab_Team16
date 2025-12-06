@@ -123,6 +123,7 @@ class AddRecipiePageController: BaseViewController {
                 switch result {
                 case .success(let id):
                     print("Recipe saved with ID:", id)
+                    self.rootView.clearInputs()
                     NotificationCenter.default.post(name: NSNotification.Name("Refresh"), object: nil)
                     self.tabBarController?.selectedIndex = 2
                 case .failure(let error):

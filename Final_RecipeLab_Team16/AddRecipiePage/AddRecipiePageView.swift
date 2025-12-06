@@ -343,4 +343,18 @@ class AddRecipePageView: UIView {
     @objc private func didTapUpload() {
         NotificationCenter.default.post(name: NSNotification.Name("AddRecipePickImage"), object: nil)
     }
+    
+    func clearInputs() {
+        titleField.text = ""
+        cookingTimeField.text = ""
+        uploadIcon.image = UIImage(systemName: "photo.on.rectangle")
+        uploadLabel.text = "Tap to upload"
+        uploadedImageURL = nil
+
+        ingredientStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        stepsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        addIngredientRow()
+        addStepRow()
+    }
 }

@@ -50,19 +50,16 @@ class AddRecipiePageController: BaseViewController {
             completion(.failure(NSError(domain: "Image", code: -1)))
             return
         }
-        let ref = Storage.storage().reference().child("recipes/\(UUID().uuidString).jpg")
+        let filename = "\(UUID().uuidString).jpg"
+        let storagePath = "recipes/\(filename)"
+        let ref = Storage.storage().reference().child(storagePath)
         ref.putData(data, metadata: nil) { _, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
-            ref.downloadURL { url, error in
-                if let url = url {
-                    completion(.success(url.absoluteString))
-                } else {
-                    completion(.failure(error ?? NSError()))
-                }
-            }
+            let cdnUrl = "https://dark-voice-c973.immactavish.workers.dev/\(storagePath)"
+            completion(.success(cdnUrl))
         }
     }
     

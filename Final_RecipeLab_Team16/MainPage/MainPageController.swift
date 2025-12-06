@@ -22,6 +22,7 @@ class MainPageController: BaseViewController {
         mainView.delegate = self
 
         setupData()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: Notification.Name("Refresh"), object: nil)
     }
 
     private func setupData() {
@@ -36,6 +37,10 @@ class MainPageController: BaseViewController {
                 self?.mainView.render(recipes: recipes)
             }
         }
+    }
+
+    @objc private func handleRefresh() {
+        setupData()
     }
 }
 

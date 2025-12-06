@@ -11,8 +11,6 @@ class RecipieDetailPageView: UIView {
 
     // MARK: - UI
 
-    private let stackView = UIStackView()
-
     private let recipeImageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
@@ -20,11 +18,39 @@ class RecipieDetailPageView: UIView {
         return iv
     }()
 
+    private let contentStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .vertical
+        sv.alignment = .fill
+        sv.distribution = .fill
+        sv.spacing = 12
+        sv.isLayoutMarginsRelativeArrangement = true
+        sv.directionalLayoutMargins = NSDirectionalEdgeInsets(
+            top: 0, leading: 16, bottom: 24, trailing: 16
+        )
+        return sv
+    }()
+
+    // Title
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         lbl.numberOfLines = 0
         return lbl
+    }()
+
+    // Avatar + author + time
+    private let avatarImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.layer.cornerRadius = 16
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            iv.widthAnchor.constraint(equalToConstant: 32),
+            iv.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        return iv
     }()
 
     private let authorLabel: UILabel = {
@@ -40,6 +66,23 @@ class RecipieDetailPageView: UIView {
         return lbl
     }()
 
+    private let authorRowStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.alignment = .center
+        sv.spacing = 8
+        return sv
+    }()
+
+    private let authorTextStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .vertical
+        sv.alignment = .leading
+        sv.spacing = 2
+        return sv
+    }()
+
+    // Ingredients
     private let ingredientsTitleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Ingredients"
@@ -54,6 +97,7 @@ class RecipieDetailPageView: UIView {
         return lbl
     }()
 
+    // Instructions
     private let instructionsTitleLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Instructions"
@@ -68,9 +112,26 @@ class RecipieDetailPageView: UIView {
         return lbl
     }()
 
-    private let statsStackView = UIStackView()
-    private let likeIconView = UIImageView(image: UIImage(systemName: "heart.fill"))
-    private let likeCountLabel = UILabel()
+    // Likes
+    private let statsStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.alignment = .center
+        sv.spacing = 8
+        return sv
+    }()
+
+    private let likeIconView: UIImageView = {
+        let iv = UIImageView(image: UIImage(systemName: "heart.fill"))
+        iv.tintColor = .systemOrange
+        return iv
+    }()
+
+    private let likeCountLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont.systemFont(ofSize: 15)
+        return lbl
+    }()
 
     // MARK: - Init
 
@@ -78,135 +139,101 @@ class RecipieDetailPageView: UIView {
         super.init(frame: frame)
         setupUI()
         setupConstraints()
-        configureWithFakeData()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
         setupConstraints()
-        configureWithFakeData()
     }
 
-    // MARK: - Fake content
+    // MARK: - Public
 
-    private func configureWithFakeData() {
+    func configure(with recipe: Recipe) {
         backgroundColor = .systemBackground
 
-        recipeImageView.image = UIImage(named: "blackPasta") ?? UIImage(systemName: "photo")
-        titleLabel.text = "Creamy Pasta"
-        authorLabel.text = "Alice"
-        timeAgoLabel.text = "2 hours ago"
+        // main image
+        recipeImageView.loadImage(from: recipe.imageUrl,
+                                  placeholderNamed: "placeholder")
 
-        let ingredients = [
-            "8 oz fettuccine or spaghetti",
-            "1 cup heavy cream",
-            "1/2 cup grated Parmesan cheese",
-            "2 tbsp unsalted butter",
-            "Salt and pepper to taste"
-        ]
+        titleLabel.text = recipe.title
 
-        let steps = [
-            "Cook the pasta according to package instructions. Drain and set aside.",
-            "In a large pan, melt the butter over medium heat. Add the heavy cream and bring to a gentle simmer.",
-            "Stir in the Parmesan cheese until the sauce thickens slightly.",
-            "Season with salt and pepper. Toss the cooked pasta in the sauce until evenly coated.",
-            "Serve immediately and garnish with extra Parmesan and parsley, if desired."
-        ]
+        // author + time
+        authorLabel.text = recipe.userName
+        timeAgoLabel.text = recipe.creationTimeAgo
 
-        ingredientsLabel.text = ingredients.map { "• \($0)" }.joined(separator: "\n")
+        avatarImageView.loadImage(from: recipe.userImageUrl,
+                                  placeholderNamed: "chiefimage (1)")
 
-        instructionsLabel.text = steps
+        // ingredients
+        ingredientsLabel.text = recipe.ingredients
+            .map { "• \($0)" }
+            .joined(separator: "\n")
+
+        // instructions as numbered list
+        instructionsLabel.text = recipe.steps
             .enumerated()
             .map { "\($0 + 1). \($1)" }
             .joined(separator: "\n\n")
 
-        likeIconView.tintColor = .systemOrange
-        likeCountLabel.text = "128"
-        likeCountLabel.font = UIFont.systemFont(ofSize: 15)
-    }
-
-    func configure(with recipe: Recipe) {
-        backgroundColor = .systemBackground
-        recipeImageView.loadImage(from: recipe.imageUrl)
-        titleLabel.text = recipe.title
-        authorLabel.text = recipe.userName
-        timeAgoLabel.text = recipe.creationTimeAgo
-        ingredientsLabel.text = recipe.ingredients.map { "• \($0)" }.joined(separator: "\n")
-        instructionsLabel.text = recipe.steps.enumerated().map { "\($0 + 1). \($1)" }.joined(separator: "\n\n")
         likeCountLabel.text = "\(recipe.likedBy.count)"
     }
 
     // MARK: - Setup
 
     private func setupUI() {
-        // Add stackView directly to self
-        addSubview(stackView)
+        backgroundColor = .systemBackground
 
         addSubview(recipeImageView)
+        addSubview(contentStackView)
+
         recipeImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentStackView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Stack
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        stackView.spacing = 12
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        // FIX: Ensure stackView is allowed to grow vertically to determine content size
-        stackView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        // build author row
+        authorTextStackView.addArrangedSubview(authorLabel)
+        authorTextStackView.addArrangedSubview(timeAgoLabel)
 
-        // Layout margins for text
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(
-            top: 0,
-            leading: 16,
-            bottom: 24,
-            trailing: 16
-        )
+        authorRowStackView.addArrangedSubview(avatarImageView)
+        authorRowStackView.addArrangedSubview(authorTextStackView)
 
-        // Stats row
-        statsStackView.axis = .horizontal
-        statsStackView.alignment = .center
-        statsStackView.distribution = .fill
-        statsStackView.spacing = 8
-
-        let statsSpacer = UIView()
-        statsSpacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        // build stats row
+        let spacer = UIView()
+        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
         statsStackView.addArrangedSubview(likeIconView)
         statsStackView.addArrangedSubview(likeCountLabel)
-        statsStackView.addArrangedSubview(statsSpacer)
+        statsStackView.addArrangedSubview(spacer)
 
-        // Arrange content inside stackView
+        // add arranged subviews to main stack
+        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.addArrangedSubview(authorRowStackView)
 
-        // 2. Content labels
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(authorLabel)
-        stackView.addArrangedSubview(timeAgoLabel)
+        contentStackView.setCustomSpacing(20, after: authorRowStackView)
+        contentStackView.addArrangedSubview(ingredientsTitleLabel)
+        contentStackView.addArrangedSubview(ingredientsLabel)
 
-        stackView.setCustomSpacing(20, after: timeAgoLabel)
-        stackView.addArrangedSubview(ingredientsTitleLabel)
-        stackView.addArrangedSubview(ingredientsLabel)
+        contentStackView.setCustomSpacing(20, after: ingredientsLabel)
+        contentStackView.addArrangedSubview(instructionsTitleLabel)
+        contentStackView.addArrangedSubview(instructionsLabel)
 
-        stackView.setCustomSpacing(20, after: ingredientsLabel)
-        stackView.addArrangedSubview(instructionsTitleLabel)
-        stackView.addArrangedSubview(instructionsLabel)
-
-        stackView.setCustomSpacing(20, after: instructionsLabel)
-        stackView.addArrangedSubview(statsStackView)
+        contentStackView.setCustomSpacing(20, after: instructionsLabel)
+        contentStackView.addArrangedSubview(statsStackView)
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            // big image on top
             recipeImageView.topAnchor.constraint(equalTo: topAnchor),
             recipeImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             recipeImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             recipeImageView.heightAnchor.constraint(equalToConstant: 240),
 
-            stackView.topAnchor.constraint(equalTo: recipeImageView.bottomAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            // content below image
+            contentStackView.topAnchor.constraint(equalTo: recipeImageView.bottomAnchor, constant: 16),
+            contentStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

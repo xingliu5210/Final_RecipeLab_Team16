@@ -63,29 +63,35 @@ class AddRecipiePageController: BaseViewController {
         }
     }
     
+    // MARK: - Helper Function
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Opps!", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+    }
+    
     @objc private func saveRecipe() {
-
+        // 1. Check user login status
         guard let user = Auth.auth().currentUser else {
-            print("User not logged in")
+            showAlert(message: "You need to be logged in to save a recipe.")
             return
         }
 
-        guard let title = rootView.titleField.text, !title.isEmpty else {
-            print("Missing title")
+        // 2. Validate Title (cannot be empty after trimming whitespace)
+        guard let title = rootView.titleField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !title.isEmpty else {
+            showAlert(message: "Please enter a recipe title.")
             return
         }
 
+        // 3. Validate Cooking Time (must be a number > 0)
         guard let timeText = rootView.cookingTimeField.text,
-              let cookingTime = Int(timeText) else {
-            print("Invalid cooking time")
+                let cookingTime = Int(timeText),
+                cookingTime > 0 else {
+            showAlert(message: "Please enter a valid positive cooking time.")
             return
         }
 
-        guard let imageUrl = rootView.uploadedImageURL else {
-            print("Image not uploaded")
-            return
-        }
-
+        // 4. Validate Ingredients (Filter empty lines, require at least one valid item)
         let ingredients: [String] = rootView.ingredientStack.arrangedSubviews.compactMap { row in
             guard let stack = row as? UIStackView else { return nil }
             guard let tf = stack.arrangedSubviews.first(where: { $0 is UITextField }) as? UITextField else { return nil }
@@ -93,12 +99,35 @@ class AddRecipiePageController: BaseViewController {
             return (text?.isEmpty == false) ? text : nil
         }
 
+        if ingredients.isEmpty {
+            showAlert(message: "Please add at least one ingredient.")
+            return
+        }
+
+        // 5. Validate Steps (Same logic as ingredients)
         let steps: [String] = rootView.stepsStack.arrangedSubviews.compactMap { row in
             guard let stack = row as? UIStackView else { return nil }
             guard let tf = stack.arrangedSubviews.first(where: { $0 is UITextField }) as? UITextField else { return nil }
             let text = tf.text?.trimmingCharacters(in: .whitespacesAndNewlines)
             return (text?.isEmpty == false) ? text : nil
         }
+            
+        if steps.isEmpty {
+            showAlert(message: "Please add at least one cooking step.")
+            return
+        }
+
+        // 6. Validate if image is uploaded
+        guard let imageUrl = rootView.uploadedImageURL else {
+            showAlert(message: "Please upload a photo of your recipe.")
+            return
+        }
+
+        // --- Validation Passed, Start Saving Logic ---
+            
+        // Show Loading State (Disable button to prevent double-tap)
+        rootView.saveButton.isEnabled = false
+        rootView.saveButton.setTitle("Saving...", for: .normal)
 
         let recipe = Recipe(
             id: nil,
@@ -116,16 +145,26 @@ class AddRecipiePageController: BaseViewController {
 
         let model = AddRecipiePageModel()
 
-        model.addRecipe(recipe) { result in
+        model.addRecipe(recipe) { [weak self] result in
             DispatchQueue.main.async {
+                // Re-enable the button regardless of success or failure
+                self?.rootView.saveButton.isEnabled = true
+                self?.rootView.saveButton.setTitle("Save Recipe", for: .normal)
+                    
                 switch result {
                 case .success(let id):
                     print("Recipe saved with ID:", id)
-                    self.rootView.clearInputs()
-                    NotificationCenter.default.post(name: NSNotification.Name("Refresh"), object: nil)
-                    self.tabBarController?.selectedIndex = 2
+                    // Feedback on success
+                    let alert = UIAlertController(title: "Success", message: "Recipe published successfully!", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                        self?.rootView.clearInputs()
+                        NotificationCenter.default.post(name: NSNotification.Name("Refresh"), object: nil)
+                        self?.tabBarController?.selectedIndex = 2
+                    }))
+                    self?.present(alert, animated: true)
+                        
                 case .failure(let error):
-                    print("Save failed:", error.localizedDescription)
+                    self?.showAlert(message: "Failed to save: \(error.localizedDescription)")
                 }
             }
         }

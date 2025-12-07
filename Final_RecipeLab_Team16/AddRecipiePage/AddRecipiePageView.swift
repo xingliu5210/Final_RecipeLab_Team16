@@ -92,6 +92,20 @@ class AddRecipePageView: UIView {
         tf.keyboardType = .numberPad   // ← IMPORTANT
         tf.placeholder = "Cooking Time (minutes)"
         tf.borderStyle = .roundedRect
+        
+        // --- NEW: Add Toolbar to Keyboard ---
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        // Flexible space pushes the "Done" button to the right
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        // Call resignFirstResponder to dismiss keyboard when "Done" is tapped
+        let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: tf, action: #selector(resignFirstResponder))
+                
+        toolbar.items = [flexSpace, doneBtn]
+        tf.inputAccessoryView = toolbar
+        
         return tf
     }()
 

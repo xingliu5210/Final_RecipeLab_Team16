@@ -5,6 +5,17 @@ protocol MyRecipePageSelectionDelegate: AnyObject {
 }
 
 class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // Placeholder when user is not logged in
+        let loginPlaceholderLabel: UILabel = {
+            let label = UILabel()
+            label.text = "Please log in to view your recipes"
+            label.textAlignment = .center
+            label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+            label.textColor = .darkGray
+            label.isHidden = true
+            return label
+        }()
 
     // Helper to talk to Controller
     var onSegmentChanged: ((Int) -> Void)?
@@ -123,6 +134,15 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
     // Boilerplate for display
     func showContent(user: UserProfile) {
         usernameLabel.text = user.username
+        loginPlaceholderLabel.isHidden = true
+        loginPlaceholderLabel.removeFromSuperview()
+        avatarImageView.isHidden = false
+        usernameLabel.isHidden = false
+        roleLabel.isHidden = false
+        followersLabel.isHidden = false
+        recipesLabel.isHidden = false
+        segmentedControl.isHidden = false
+        collectionView.isHidden = false
         if let url = URL(string: user.avatarUrl ?? "") {
             DispatchQueue.global().async {
                 if let data = try? Data(contentsOf: url), let img = UIImage(data: data) {
@@ -134,7 +154,28 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
         }
     }
     
-    func showLoginPlaceholder() { /* Keep your existing logic if needed, or simple hide/show */ }
+    func showLoginPlaceholder() {
+            avatarImageView.isHidden = true
+            usernameLabel.isHidden = true
+            roleLabel.isHidden = true
+            followersLabel.isHidden = true
+            recipesLabel.isHidden = true
+            segmentedControl.isHidden = true
+            collectionView.isHidden = true
+
+        if loginPlaceholderLabel.superview == nil {
+            addSubview(loginPlaceholderLabel)
+            loginPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                loginPlaceholderLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+                loginPlaceholderLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            ])
+        }
+        bringSubviewToFront(loginPlaceholderLabel)
+        loginPlaceholderLabel.isHidden = false
+    }
+    
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return recipes.count

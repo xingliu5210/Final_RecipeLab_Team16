@@ -30,6 +30,7 @@ class MyRecipiePageController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setContent(rootView)
+        rootView.selectionDelegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: NSNotification.Name("Refresh"), object: nil)
 
         _ = Auth.auth().addStateDidChangeListener { [weak self] _, user in
@@ -54,5 +55,12 @@ class MyRecipiePageController: BaseViewController {
     @objc private func handleRefresh() {
         guard let user = Auth.auth().currentUser else { return }
         loadUserRecipes(user.uid)
+    }
+}
+
+extension MyRecipiePageController: MyRecipePageSelectionDelegate {
+    func didSelectRecipe(_ recipe: Recipe) {
+        let vc = RecipieDetailPageController(recipe: recipe)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

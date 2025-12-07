@@ -20,7 +20,7 @@ class MainPageController: BaseViewController {
         setContent(mainView)
 
         // Receive taps from cards
-        mainView.delegate = self
+        mainView.selectionDelegate = self
 
         setupData()
         NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh), name: Notification.Name("Refresh"), object: nil)
@@ -46,10 +46,10 @@ class MainPageController: BaseViewController {
     }
 }
 
-// MARK: - MainPageViewDelegate
+// MARK: - RecipeCardSelectionDelegate
 
-extension MainPageController: MainPageViewDelegate {
-    func mainPageView(_ view: MainPageView, didSelect recipe: Recipe) {
+extension MainPageController: RecipeCardSelectionDelegate {
+    func didSelectRecipe(_ recipe: Recipe) {
         let detailVC = RecipieDetailPageController(recipe: recipe)
         navigationController?.pushViewController(detailVC, animated: true)
     }

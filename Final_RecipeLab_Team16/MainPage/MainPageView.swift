@@ -7,13 +7,9 @@
 
 import UIKit
 
-protocol MainPageViewDelegate: AnyObject {
-    func mainPageView(_ view: MainPageView, didSelect recipe: Recipe)
-}
-
 class MainPageView: UIView {
 
-    weak var delegate: MainPageViewDelegate?
+    weak var selectionDelegate: RecipeCardSelectionDelegate?
     
     private var currentUserId: String?
 
@@ -102,6 +98,6 @@ class MainPageView: UIView {
         let index = card.tag
         guard index >= 0 && index < recipes.count else { return }
         let recipe = recipes[index]
-        delegate?.mainPageView(self, didSelect: recipe)
+        selectionDelegate?.didSelectRecipe(recipe)
     }
 }

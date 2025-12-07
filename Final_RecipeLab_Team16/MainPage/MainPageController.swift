@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MainPageController: BaseViewController {
 
@@ -34,7 +35,8 @@ class MainPageController: BaseViewController {
             guard let recipes = recipes else { return }
 
             DispatchQueue.main.async {
-                self?.mainView.render(recipes: recipes)
+                let uid = Auth.auth().currentUser?.uid
+                self?.mainView.render(recipes: recipes, userId: uid)
             }
         }
     }

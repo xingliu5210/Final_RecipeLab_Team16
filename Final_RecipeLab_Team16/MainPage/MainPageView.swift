@@ -14,6 +14,8 @@ protocol MainPageViewDelegate: AnyObject {
 class MainPageView: UIView {
 
     weak var delegate: MainPageViewDelegate?
+    
+    private var currentUserId: String?
 
     private var recipes: [Recipe] = []
 
@@ -41,7 +43,8 @@ class MainPageView: UIView {
 
     // MARK: - Public
 
-    func render(recipes: [Recipe]) {
+    func render(recipes: [Recipe], userId: String?) {
+        self.currentUserId = userId
         self.recipes = recipes
 
         // Remove old rows
@@ -64,8 +67,8 @@ class MainPageView: UIView {
                 currentRow = row
             }
 
-            let card = RecipeCard()
-            card.configure(with: recipe)
+            let card = RecipeCardView()
+            card.configure(with: recipe, userId: currentUserId)
 
             card.isUserInteractionEnabled = true
             card.tag = index
@@ -95,7 +98,7 @@ class MainPageView: UIView {
     }
 
     @objc private func cardTapped(_ gesture: UITapGestureRecognizer) {
-        guard let card = gesture.view as? RecipeCard else { return }
+        guard let card = gesture.view as? RecipeCardView else { return }
         let index = card.tag
         guard index >= 0 && index < recipes.count else { return }
         let recipe = recipes[index]

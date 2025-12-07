@@ -18,10 +18,10 @@ class MyRecipiePageController: BaseViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let recipes):
-                    self?.rootView.updateRecipes(recipes)
+                    self?.rootView.updateRecipes(recipes, userId)
                 case .failure(let error):
                     print("Failed to fetch recipes:", error)
-                    self?.rootView.updateRecipes([])
+                    self?.rootView.updateRecipes([], userId)
                 }
             }
         }

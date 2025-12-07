@@ -7,7 +7,9 @@
 
 import UIKit
 
-class RecipeCard: UICollectionViewCell {
+class RecipeCardView: UICollectionViewCell {
+    private let model = RecipeCardModel()
+    
     static let identifier = "RecipeCard"
 
     private let userImageView = UIImageView()
@@ -24,6 +26,11 @@ class RecipeCard: UICollectionViewCell {
     private let clockIcon = UIImageView()
     private let timeAmountLabel = UILabel()
 
+    private var recipeId: String?
+    private var userId: String?
+    private var isLiked: Bool = false
+
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -36,7 +43,12 @@ class RecipeCard: UICollectionViewCell {
         setupConstraints()
     }
 
-    func configure(with recipe: Recipe) {
+    func configure(with recipe: Recipe, userId: String?) {
+        self.recipeId = recipe.id
+        self.userId = userId
+        self.isLiked = recipe.likedBy[userId ?? ""] != nil
+        updateLikeIcon()
+
         userNameLabel.text = recipe.userName
         timeLabel.text = recipe.creationTimeAgo
 
@@ -53,7 +65,7 @@ class RecipeCard: UICollectionViewCell {
 }
 
 // MARK: UI Setup
-private extension RecipeCard {
+private extension RecipeCardView {
 
     func setupUI() {
         backgroundColor = .white
@@ -82,6 +94,9 @@ private extension RecipeCard {
 
         likeIcon.image = UIImage(systemName: "heart.fill")
         likeIcon.tintColor = .systemOrange
+        likeIcon.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapLike))
+        likeIcon.addGestureRecognizer(tap)
 
         clockIcon.image = UIImage(systemName: "clock")
         clockIcon.tintColor = .gray
@@ -97,6 +112,51 @@ private extension RecipeCard {
             addSubview($0)
         }
         descLabel.isHidden = true
+    }
+
+    private func updateLikeIcon() {
+        let imageName = isLiked ? "likeOn (1)" : "likeOff (1)"
+
+        likeIcon.image = UIImage(named: imageName)   // <-- correct
+        likeIcon.tintColor = .clear                 // PNG icons must NOT tint
+    }
+
+    @objc private func didTapLike() {
+        guard let recipeId = recipeId, let userId = userId else { return }
+
+        if isLiked {
+            model.unlikeRecipe(recipeId: recipeId, userId: userId) { [weak self] error in
+                guard error == nil else { return }
+                DispatchQueue.main.async {
+                    self?.isLiked = false
+                    self?.animateHeart()
+                    self?.updateLikeIcon()
+                    NotificationCenter.default.post(name: NSNotification.Name("Refresh"), object: nil)
+                }
+            }
+        } else {
+            model.likeRecipe(recipeId: recipeId, userId: userId) { [weak self] error in
+                guard error == nil else { return }
+                DispatchQueue.main.async {
+                    self?.isLiked = true
+                    self?.animateHeart()
+                    self?.updateLikeIcon()
+                    NotificationCenter.default.post(name: NSNotification.Name("Refresh"), object: nil)
+                }
+            }
+        }
+    }
+
+    private func animateHeart() {
+        likeIcon.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        UIView.animate(withDuration: 0.25,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5,
+                       initialSpringVelocity: 0.8,
+                       options: .curveEaseOut,
+                       animations: {
+            self.likeIcon.transform = .identity
+        })
     }
 
     func setupConstraints() {

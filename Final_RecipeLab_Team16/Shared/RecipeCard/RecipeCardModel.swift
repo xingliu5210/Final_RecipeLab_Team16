@@ -1,7 +1,7 @@
 import Foundation
 import FirebaseFirestore
 
-class LikeModel {
+class RecipeCardModel {
 
     private let db = Firestore.firestore()
 

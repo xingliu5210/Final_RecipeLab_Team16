@@ -121,17 +121,6 @@ class RecipieDetailPageView: UIView {
         return sv
     }()
 
-    private let likeIconView: UIImageView = {
-        let iv = UIImageView(image: UIImage(systemName: "heart.fill"))
-        iv.tintColor = .systemOrange
-        return iv
-    }()
-
-    private let likeCountLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.font = UIFont.systemFont(ofSize: 15)
-        return lbl
-    }()
 
     // MARK: - Init
 
@@ -176,7 +165,6 @@ class RecipieDetailPageView: UIView {
             .map { "\($0 + 1). \($1)" }
             .joined(separator: "\n\n")
 
-        likeCountLabel.text = "\(recipe.likedBy.count)"
     }
 
     // MARK: - Setup
@@ -201,9 +189,6 @@ class RecipieDetailPageView: UIView {
         let spacer = UIView()
         spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
 
-        statsStackView.addArrangedSubview(likeIconView)
-        statsStackView.addArrangedSubview(likeCountLabel)
-        statsStackView.addArrangedSubview(spacer)
 
         // add arranged subviews to main stack
         contentStackView.addArrangedSubview(titleLabel)

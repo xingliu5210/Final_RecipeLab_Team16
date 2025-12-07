@@ -76,6 +76,7 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
     // MARK: - Data
 
     var recipes: [Recipe] = []
+    var userId: String = ""
 
     // MARK: - Init
 
@@ -99,7 +100,7 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
 
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(RecipeCard.self, forCellWithReuseIdentifier: RecipeCard.identifier)
+        collectionView.register(RecipeCardView.self, forCellWithReuseIdentifier: RecipeCardView.identifier)
 
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
@@ -163,8 +164,8 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCard.identifier, for: indexPath) as! RecipeCard
-        cell.configure(with: recipes[indexPath.item])
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCardView.identifier, for: indexPath) as! RecipeCardView
+        cell.configure(with: recipes[indexPath.item], userId : self.userId)
         return cell
     }
 
@@ -229,8 +230,9 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
         updateUserProfile(user)
     }
     
-    func updateRecipes(_ list: [Recipe]) {
+    func updateRecipes(_ list: [Recipe],_ userId : String) {
         self.recipes = list
+        self.userId = userId
         self.collectionView.reloadData()
     }
 }

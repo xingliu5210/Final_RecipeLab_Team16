@@ -1,5 +1,9 @@
 import UIKit
 
+protocol MyRecipePageSelectionDelegate: AnyObject {
+    func didSelectRecipe(_ recipe: Recipe)
+}
+
 class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     // Placeholder when user is not logged in
@@ -77,6 +81,7 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
 
     var recipes: [Recipe] = []
     var userId: String = ""
+    weak var selectionDelegate: MyRecipePageSelectionDelegate?
 
     // MARK: - Init
 
@@ -165,7 +170,16 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCardView.identifier, for: indexPath) as! RecipeCardView
-        cell.configure(with: recipes[indexPath.item], userId : self.userId)
+
+        let recipe = recipes[indexPath.item]
+        cell.configure(with: recipe, userId: self.userId)
+
+        cell.tag = indexPath.item
+
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(cardTapped(_:)))
+        cell.addGestureRecognizer(gesture)
+        cell.isUserInteractionEnabled = true
+
         return cell
     }
 
@@ -234,5 +248,14 @@ class MyRecipiePageView: UIView, UICollectionViewDataSource, UICollectionViewDel
         self.recipes = list
         self.userId = userId
         self.collectionView.reloadData()
+    }
+    
+    @objc private func cardTapped(_ gesture: UITapGestureRecognizer) {
+        guard let card = gesture.view as? RecipeCardView else { return }
+        let index = card.tag
+        guard index >= 0 && index < recipes.count else { return }
+
+        let recipe = recipes[index]
+        selectionDelegate?.didSelectRecipe(recipe)
     }
 }

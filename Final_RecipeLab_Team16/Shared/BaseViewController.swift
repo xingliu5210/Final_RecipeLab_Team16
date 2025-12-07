@@ -148,7 +148,7 @@ class BaseViewController: UIViewController {
                         print("Firebase sign-in error: \(error.localizedDescription)")
                         return
                     }
-
+                    NotificationCenter.default.post(name: Notification.Name("Refresh"), object: nil)
                     print("Login success:", authResult?.user.uid ?? "No UID")
                 }
             }
